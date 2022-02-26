@@ -1,5 +1,6 @@
 import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util';
 
+// ステート、共有の変数的なもの
 const state = {
   user: null,
   apiStatus: null,
