@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 class Photo extends Model
 {
     protected $keyType = 'string';
-
+    // IDの長さ
     const ID_LENGTH = 12;
 
     public function __construct(array $attributes = [])
