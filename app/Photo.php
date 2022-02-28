@@ -13,8 +13,10 @@ class Photo extends Model
 
     public function __construct(array $attributes = [])
     {
+        // 親モデル Modelのコンストラクタを持ってきてる
         parent::__construct($attributes);
 
+        // attributesプロパティにidがなければ、実行する
         if(! Arr::get($this->attributes, 'id')) {
             $this->setId();
         }
