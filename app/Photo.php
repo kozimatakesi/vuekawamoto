@@ -10,6 +10,7 @@ use Illuminate\Support\Arr;
 
 class Photo extends Model
 {
+    protected $perPage = 9;
     protected $keyType = 'string';
 
     /** JSONに含める属性 */
