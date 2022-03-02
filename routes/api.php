@@ -12,5 +12,7 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/user', fn() => Auth::user())->name('user');
 // 写真投稿
 Route::post('/photos', 'PhotoController@create')->name('photo.create');
-// 写真一覧
+// 写真一覧 ページネーション
 Route::get('/photos', 'PhotoController@index')->name('photo.index');
+// 写真一覧取得 全て
+Route::get('/photo', 'PhotoController@all')->name('photo.all');

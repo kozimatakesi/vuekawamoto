@@ -19,8 +19,18 @@ class PhotoController extends Controller
     }
 
     /**
-     * 写真一覧
+     * 写真一覧 全てを取得するアクション
      */
+    public function all()
+    {
+        $photos = Photo::all();
+        return $photos;
+    }
+
+    /**
+     * 写真一覧 ページネーション毎
+     */
+
     public function index()
     {
         $photos = Photo::with(['owner'])

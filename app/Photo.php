@@ -15,12 +15,12 @@ class Photo extends Model
 
     /** JSONに含める属性 */
     protected $appends = [
-        'url',
+        'url'
     ];
 
     /** JSONに含める属性 */
     protected $visible = [
-        'id', 'owner', 'url',
+        'id', 'owner', 'url','original_filename'
     ];
 
     // IDの長さ
@@ -77,4 +77,5 @@ class Photo extends Model
     {
         return Storage::cloud()->url($this->attributes['filename']);
     }
+
 }

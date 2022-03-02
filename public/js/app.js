@@ -2251,6 +2251,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Loader_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Loader.vue */ "./resources/js/components/Loader.vue");
 
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -2320,7 +2326,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       reader.readAsDataURL(event.target.files[0]);
       this.photo = event.target.files[0];
-      console.log(this.photo.name);
     },
     reset: function reset() {
       this.preview = '';
@@ -2331,37 +2336,95 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var formData, response;
+        var indexResponse, datas, _iterator, _step, data, formData, response;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                _context.next = 2;
+                return axios.get('/api/photo');
+
+              case 2:
+                indexResponse = _context.sent;
+                console.log(_this2.photo.name);
+                console.log(indexResponse.data);
+                datas = indexResponse.data;
+                _iterator = _createForOfIteratorHelper(datas);
+                _context.prev = 7;
+
+                _iterator.s();
+
+              case 9:
+                if ((_step = _iterator.n()).done) {
+                  _context.next = 19;
+                  break;
+                }
+
+                data = _step.value;
+
+                if (!(data.original_filename === _this2.photo.name)) {
+                  _context.next = 17;
+                  break;
+                }
+
+                if (window.confirm('同名ファイルが既にアップロードされていますが、本当にアップロードしますか?')) {
+                  _context.next = 16;
+                  break;
+                }
+
+                return _context.abrupt("return", false);
+
+              case 16:
+                return _context.abrupt("break", 19);
+
+              case 17:
+                _context.next = 9;
+                break;
+
+              case 19:
+                _context.next = 24;
+                break;
+
+              case 21:
+                _context.prev = 21;
+                _context.t0 = _context["catch"](7);
+
+                _iterator.e(_context.t0);
+
+              case 24:
+                _context.prev = 24;
+
+                _iterator.f();
+
+                return _context.finish(24);
+
+              case 27:
                 _this2.loading = true;
                 formData = new FormData();
                 formData.append('photo', _this2.photo);
-                _context.next = 5;
+                _context.next = 32;
                 return axios.post('/api/photos', formData);
 
-              case 5:
+              case 32:
                 response = _context.sent;
-                console.log(formData);
                 _this2.loading = false;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 11;
+                  _context.next = 37;
                   break;
                 }
 
                 _this2.errors = response.data.errors;
                 return _context.abrupt("return", false);
 
-              case 11:
+              case 37:
                 _this2.reset();
 
                 _this2.$emit('input', false);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 16;
+                  _context.next = 42;
                   break;
                 }
 
@@ -2369,7 +2432,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 16:
+              case 42:
                 // メッセージ登録
                 _this2.$store.commit('message/setContent', {
                   content: '写真が投稿されました!',
@@ -2378,12 +2441,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this2.$router.push("/photos/".concat(response.data.id));
 
-              case 18:
+              case 44:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee);
+        }, _callee, null, [[7, 21, 24, 27]]);
       }))();
     }
   }

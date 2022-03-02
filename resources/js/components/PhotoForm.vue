@@ -63,7 +63,6 @@ export default {
 
           reader.readAsDataURL(event.target.files[0])
           this.photo = event.target.files[0]
-          console.log(this.photo.name)
       },
       reset() {
           this.preview = ''
@@ -71,12 +70,27 @@ export default {
           this.$el.querySelector('input[type="file"]').value = null
       },
       async submit() {
+          // photosテーブル全てデータを取得
+          const indexResponse = await axios.get('/api/photo')
+          console.log(this.photo.name)
+          console.log(indexResponse.data)
+          const datas = indexResponse.data
+
+          for(let data of datas){
+              if(data.original_filename === this.photo.name) {
+                  if(!window.confirm('同名ファイルが既にアップロードされていますが、本当にアップロードしますか?')) {
+                      return false;
+                  } else {
+                      break;
+                  }
+              }
+          }
+
           this.loading = true
 
           const formData = new FormData()
           formData.append('photo', this.photo)
           const response = await axios.post('/api/photos', formData)
-          console.log(formData)
           this.loading = false
 
           if(response.status === UNPROCESSABLE_ENTITY) {
