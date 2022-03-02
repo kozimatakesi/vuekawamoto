@@ -32,6 +32,7 @@ class PhotoListApiTest extends TestCase
             return [
                 'id' => $photo->id,
                 'url' => $photo->url,
+                'original_filename' => $photo->original_filename,
                 'owner' => [
                     'name' => $photo->owner->name,
                 ],

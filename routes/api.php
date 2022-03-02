@@ -16,3 +16,5 @@ Route::post('/photos', 'PhotoController@create')->name('photo.create');
 Route::get('/photos', 'PhotoController@index')->name('photo.index');
 // 写真一覧取得 全て
 Route::get('/photo', 'PhotoController@all')->name('photo.all');
+// 写真詳細
+Route::get('/photos/{id}', 'PhotoController@show')->name('photo.show');

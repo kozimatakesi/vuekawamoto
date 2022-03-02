@@ -15,11 +15,11 @@ class PhotoController extends Controller
     public function __construct()
     {
         // 認証が必要
-        $this->middleware('auth')->except(['index', 'download']);
+        $this->middleware('auth')->except(['index', 'download', 'show']);
     }
 
     /**
-     * 写真一覧 全てを取得するアクション
+     * 写真一覧 全てを取得するメソッド
      */
     public function all()
     {
@@ -57,6 +57,8 @@ class PhotoController extends Controller
         // インスタンス生成時に割り振られたランダムなID値と
         // 本来の拡張子を組み合わせてファイル名とする
         $photo->filename = $photo->id . '.' . $extension;
+
+        // originalNameをカラムoriginal_filenameに入れる、oliginalNameを取得するにはgetClientOriginalName()
         $photo->original_filename = $request->photo->getClientOriginalName();
 
 
@@ -103,5 +105,17 @@ class PhotoController extends Controller
         ];
 
         return response(Storage::cloud()->get($photo->filename), 200, $headers);
+    }
+
+    /**
+     * 写真詳細
+     * @param string $id
+     * @return Photo
+     */
+    public function show(string $id)
+    {
+        $photo = Photo::where('id', $id)->with(['owner'])->first();
+
+        return $photo ?? abort(404);
     }
 }
