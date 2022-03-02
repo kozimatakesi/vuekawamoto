@@ -5,7 +5,7 @@
         <Loader>Sending your photo...</Loader>
     </div>
     <form v-show="! loading" class="form" @submit.prevent="submit">
-      <div class="errors" v-if="errors">
+    <div class="errors" v-if="errors">
         <ul v-if="errors.photo">
         <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
         </ul>
@@ -63,6 +63,7 @@ export default {
 
           reader.readAsDataURL(event.target.files[0])
           this.photo = event.target.files[0]
+          console.log(this.photo.name)
       },
       reset() {
           this.preview = ''
@@ -75,7 +76,7 @@ export default {
           const formData = new FormData()
           formData.append('photo', this.photo)
           const response = await axios.post('/api/photos', formData)
-
+          console.log(formData)
           this.loading = false
 
           if(response.status === UNPROCESSABLE_ENTITY) {

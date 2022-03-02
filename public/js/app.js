@@ -2216,6 +2216,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       reader.readAsDataURL(event.target.files[0]);
       this.photo = event.target.files[0];
+      console.log(this.photo.name);
     },
     reset: function reset() {
       this.preview = '';
@@ -2239,23 +2240,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
                 response = _context.sent;
+                console.log(formData);
                 _this2.loading = false;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 10;
+                  _context.next = 11;
                   break;
                 }
 
                 _this2.errors = response.data.errors;
                 return _context.abrupt("return", false);
 
-              case 10:
+              case 11:
                 _this2.reset();
 
                 _this2.$emit('input', false);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 15;
+                  _context.next = 16;
                   break;
                 }
 
@@ -2263,7 +2265,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 15:
+              case 16:
                 // メッセージ登録
                 _this2.$store.commit('message/setContent', {
                   content: '写真が投稿されました!',
@@ -2272,7 +2274,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this2.$router.push("/photos/".concat(response.data.id));
 
-              case 17:
+              case 18:
               case "end":
                 return _context.stop();
             }
