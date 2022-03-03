@@ -3,6 +3,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import PhotoList from './pages/PhotoList.vue';
+import PhotoOwn from './pages/PhotoOwn.vue';
+
 import Login from './pages/Login.vue';
 
 import store from './store';
@@ -23,7 +25,7 @@ const routes = [
   },
   {
     path: '/own',
-    component: PhotoList,
+    component: PhotoOwn,
     props: (route) => {
       const { page } = route.query;
       return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 };

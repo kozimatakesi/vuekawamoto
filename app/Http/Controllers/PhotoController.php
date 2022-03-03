@@ -44,9 +44,10 @@ class PhotoController extends Controller
      */
     public function own()
     {
-      $photos = Photo::with(['owner', 'likes'])
+      $user = \Auth::user();
+      $photos = Photo::where('user_id', $user->id)->with(['owner', 'likes'])
       ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
-
+      Log::debug(print_r($photos, true));
       return $photos;
     }
 
