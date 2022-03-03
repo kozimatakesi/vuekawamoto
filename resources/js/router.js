@@ -8,6 +8,7 @@ import Login from './pages/Login.vue';
 import store from './store';
 import SystemError from './pages/errors/System.vue';
 import PhotoDetail from './pages/PhotoDetail.vue';
+import NotFound from './pages/errors/NotFound.vue';
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,10 @@ const routes = [
   {
     path: '/500',
     component: SystemError,
+  },
+  {
+    path: '*',
+    component: NotFound,
   },
 ];
 
