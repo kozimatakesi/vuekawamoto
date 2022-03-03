@@ -22,6 +22,15 @@ const routes = [
     },
   },
   {
+    path: '/own',
+    component: PhotoList,
+    props: (route) => {
+      const { page } = route.query;
+      return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 };
+    },
+  },
+
+  {
     path: '/photos/:id',
     component: PhotoDetail,
     props: true,

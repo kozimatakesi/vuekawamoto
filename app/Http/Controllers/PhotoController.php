@@ -39,6 +39,16 @@ class PhotoController extends Controller
 
         return $photos;
     }
+    /**
+     * ユーザーの写真一覧
+     */
+    public function own()
+    {
+      $photos = Photo::with(['owner', 'likes'])
+      ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
+
+      return $photos;
+    }
 
     /**
      * 写真投稿

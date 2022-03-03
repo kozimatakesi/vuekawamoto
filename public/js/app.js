@@ -2163,6 +2163,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -4671,9 +4673,18 @@ var render = function () {
           : _vm._e(),
         _vm._v(" "),
         _vm.isLogin
-          ? _c("span", { staticClass: "navbar__item" }, [
-              _vm._v("\n      " + _vm._s(_vm.username) + "\n    "),
-            ])
+          ? _c(
+              "span",
+              { staticClass: "navbar__item" },
+              [
+                _c(
+                  "RouterLink",
+                  { staticClass: "button button--link", attrs: { to: "/own" } },
+                  [_vm._v("\n        " + _vm._s(_vm.username) + "\n      ")]
+                ),
+              ],
+              1
+            )
           : _c(
               "div",
               { staticClass: "navbar__item" },
@@ -22838,6 +22849,15 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var routes = [{
   path: '/',
+  component: _pages_PhotoList_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+  props: function props(route) {
+    var page = route.query.page;
+    return {
+      page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1
+    };
+  }
+}, {
+  path: '/own',
   component: _pages_PhotoList_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
   props: function props(route) {
     var page = route.query.page;
