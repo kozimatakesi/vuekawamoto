@@ -30,6 +30,8 @@ class PhotoDetailApiTest extends TestCase
             ->assertJsonFragment([
                 'id' => $photo->id,
                 'url' => $photo->url,
+                'liked_by_user' => false,
+                'likes_count' => 0,
                 'owner' => [
                     'name' => $photo->owner->name,
                 ],
@@ -41,7 +43,7 @@ class PhotoDetailApiTest extends TestCase
                                 'name' => $comment->author->name,
                             ],
                             'content' => $comment->content,
-                            'created_at' => $comment->created_at
+                            'created_at' => '2022-03-02 23:10:24'
                         ];
                     })
                     ->all(),
