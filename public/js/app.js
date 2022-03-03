@@ -3059,6 +3059,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5886,29 +5896,35 @@ var render = function () {
     "div",
     { staticClass: "photo-list" },
     [
-      _c(
-        "h3",
-        {
-          on: {
-            click: function ($event) {
-              _vm.tab = 1
+      _c("ul", { staticClass: "tab", staticStyle: { padding: "10px" } }, [
+        _c(
+          "li",
+          {
+            staticClass: "tab__item",
+            class: { "tab__item--active": _vm.tab === 1 },
+            on: {
+              click: function ($event) {
+                _vm.tab = 1
+              },
             },
           },
-        },
-        [_vm._v("All Post")]
-      ),
-      _vm._v(" "),
-      _c(
-        "h3",
-        {
-          on: {
-            click: function ($event) {
-              _vm.tab = 2
+          [_vm._v("All Post")]
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            staticClass: "tab__item",
+            class: { "tab__item--active": _vm.tab === 2 },
+            on: {
+              click: function ($event) {
+                _vm.tab = 2
+              },
             },
           },
-        },
-        [_vm._v("My Likes")]
-      ),
+          [_vm._v("Likes post")]
+        ),
+      ]),
       _vm._v(" "),
       _c(
         "div",

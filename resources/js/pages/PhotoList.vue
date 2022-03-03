@@ -1,7 +1,17 @@
 <template>
   <div class="photo-list">
-    <h3 @click="tab = 1">All Post</h3>
-    <h3 @click="tab = 2">My Likes</h3>
+    <ul class="tab" style="padding:10px">
+      <li
+        class="tab__item"
+        :class="{'tab__item--active': tab === 1 }"
+        @click="tab = 1"
+      >All Post</li>
+      <li
+        class="tab__item"
+        :class="{'tab__item--active': tab === 2 }"
+        @click="tab = 2"
+      >Likes post</li>
+    </ul>
     <div v-show="tab === 1" class="grid">
       <Photo
         class="grid__item"
