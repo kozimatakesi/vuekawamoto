@@ -1,6 +1,8 @@
 <template>
   <div class="photo-list">
-    <div class="grid">
+    <h3 @click="tab = 1">All Post</h3>
+    <h3 @click="tab = 2">My Likes</h3>
+    <div v-show="tab === 1" class="grid">
       <Photo
         class="grid__item"
         v-for="photo in photos"
@@ -8,6 +10,16 @@
         :item="photo"
         @like="onLikeClick"
       />
+    </div>
+    <div v-show="tab === 2" class="grid">
+      <Photo
+        class="grid__item"
+        v-for="photo in likesPhotos"
+        :key="photo.id"
+        :item="photo"
+        @like="onLikeClick"
+      />
+
     </div>
     <Pagination :current-page="currentPage" :last-page="lastPage" />
   </div>
@@ -32,6 +44,8 @@ export default {
   },
   data () {
     return {
+      tab: 1,
+      likesPhotos:[],
       photos: [],
       currentPage: 0,
       lastPage: 0
@@ -49,6 +63,17 @@ export default {
       this.photos = response.data.data
       this.currentPage = response.data.current_page
       this.lastPage = response.data.last_page
+
+      this.viewLikesOnly()
+    },
+    viewLikesOnly() {
+      const onlyLike = []
+      for(let photo of this.photos) {
+        if(photo.liked_by_user) {
+          onlyLike.push(photo)
+        }
+      }
+      this.likesPhotos = onlyLike
     },
     onLikeClick ({ id, liked }) {
         if (! this.$store.getters['auth/check']) {
@@ -75,6 +100,7 @@ export default {
                 photo.likes_count += 1
                 photo.liked_by_user = true
             }
+            this.viewLikesOnly()
             return photo
         })
     },
@@ -91,6 +117,7 @@ export default {
                 photo.likes_count -= 1
                 photo.liked_by_user = false
             }
+            this.viewLikesOnly()
             return photo
         })
     }

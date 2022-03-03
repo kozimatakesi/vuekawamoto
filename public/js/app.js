@@ -3020,12 +3020,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 /* harmony import */ var _components_Photo_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Photo.vue */ "./resources/js/components/Photo.vue");
 /* harmony import */ var _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Pagination.vue */ "./resources/js/components/Pagination.vue");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3058,6 +3076,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      tab: 1,
+      likesPhotos: [],
       photos: [],
       currentPage: 0,
       lastPage: 0
@@ -3093,13 +3113,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.currentPage = response.data.current_page;
                 _this.lastPage = response.data.last_page;
 
-              case 9:
+                _this.viewLikesOnly();
+
+              case 10:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    viewLikesOnly: function viewLikesOnly() {
+      var onlyLike = [];
+
+      var _iterator = _createForOfIteratorHelper(this.photos),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var photo = _step.value;
+
+          if (photo.liked_by_user) {
+            onlyLike.push(photo);
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      this.likesPhotos = onlyLike;
     },
     onLikeClick: function onLikeClick(_ref) {
       var id = _ref.id,
@@ -3147,6 +3191,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     photo.liked_by_user = true;
                   }
 
+                  _this2.viewLikesOnly();
+
                   return photo;
                 });
 
@@ -3188,6 +3234,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     photo.likes_count -= 1;
                     photo.liked_by_user = false;
                   }
+
+                  _this3.viewLikesOnly();
 
                   return photo;
                 });
@@ -3249,6 +3297,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -5838,9 +5887,67 @@ var render = function () {
     { staticClass: "photo-list" },
     [
       _c(
+        "h3",
+        {
+          on: {
+            click: function ($event) {
+              _vm.tab = 1
+            },
+          },
+        },
+        [_vm._v("All Post")]
+      ),
+      _vm._v(" "),
+      _c(
+        "h3",
+        {
+          on: {
+            click: function ($event) {
+              _vm.tab = 2
+            },
+          },
+        },
+        [_vm._v("My Likes")]
+      ),
+      _vm._v(" "),
+      _c(
         "div",
-        { staticClass: "grid" },
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.tab === 1,
+              expression: "tab === 1",
+            },
+          ],
+          staticClass: "grid",
+        },
         _vm._l(_vm.photos, function (photo) {
+          return _c("Photo", {
+            key: photo.id,
+            staticClass: "grid__item",
+            attrs: { item: photo },
+            on: { like: _vm.onLikeClick },
+          })
+        }),
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.tab === 2,
+              expression: "tab === 2",
+            },
+          ],
+          staticClass: "grid",
+        },
+        _vm._l(_vm.likesPhotos, function (photo) {
           return _c("Photo", {
             key: photo.id,
             staticClass: "grid__item",
@@ -5884,6 +5991,8 @@ var render = function () {
     "div",
     { staticClass: "photo-list" },
     [
+      _c("h3", [_vm._v("My Post")]),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "grid" },
