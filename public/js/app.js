@@ -2137,20 +2137,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _PhotoForm_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PhotoForm.vue */ "./resources/js/components/PhotoForm.vue");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
-//
-//
-//
-//
+/* harmony import */ var _PhotoForm_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PhotoForm.vue */ "./resources/js/components/PhotoForm.vue");
 //
 //
 //
@@ -2181,7 +2168,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    PhotoForm: _PhotoForm_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    PhotoForm: _PhotoForm_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
@@ -2195,30 +2182,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     username: function username() {
       return this.$store.getters['auth/username'];
-    }
-  },
-  methods: {
-    follow: function follow() {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios.put("/api/user/2");
-
-              case 2:
-                response = _context.sent;
-                return _context.abrupt("return", false);
-
-              case 4:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
     }
   }
 });
@@ -2849,8 +2812,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       photo: null,
       fullWidth: false,
       commentContent: '',
-      commentErrors: null,
-      already: ''
+      commentErrors: null
     };
   },
   methods: {
@@ -3023,9 +2985,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
+    // フォローボタンの機能
     onFollowClick: function onFollowClick() {
       if (!this.isLogin) {
-        alert('いいね機能を使うにはログインしてください。');
+        alert('フォロー機能を使うにはログインしてください。');
         return false;
       }
 
@@ -3035,6 +2998,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.follow();
       }
     },
+    // フォロー用メソッド
     follow: function follow() {
       var _this5 = this;
 
@@ -3050,10 +3014,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 response = _context5.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context5.next = 7;
+                  break;
+                }
+
+                _this5.$store.commit('error/setCode', response.status);
+
+                return _context5.abrupt("return", false);
+
+              case 7:
                 _this5.photo.owner.follow_by_user = true;
                 return _context5.abrupt("return", false);
 
-              case 6:
+              case 9:
               case "end":
                 return _context5.stop();
             }
@@ -3061,6 +3036,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
+    // アンフォロー用メソッド
     unfollow: function unfollow() {
       var _this6 = this;
 
@@ -3076,10 +3052,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 response = _context6.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context6.next = 7;
+                  break;
+                }
+
+                _this6.$store.commit('error/setCode', response.status);
+
+                return _context6.abrupt("return", false);
+
+              case 7:
                 _this6.photo.owner.follow_by_user = false;
                 return _context6.abrupt("return", false);
 
-              case 6:
+              case 9:
               case "end":
                 return _context6.stop();
             }
@@ -3113,9 +3100,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   computed: {
+    // ログイン状態をstoreでチェック
     isLogin: function isLogin() {
       return this.$store.getters['auth/check'];
     },
+    // ログインしているユーザーIDをstoreでチェック、フォローボタンを出すか出さないかの判定のため
     isUserId: function isUserId() {
       return this.$store.state.auth.user.id;
     }
@@ -3187,6 +3176,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3206,6 +3210,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       tab: 1,
       likesPhotos: [],
+      followPhotos: [],
       photos: [],
       currentPage: 0,
       lastPage: 0
@@ -3243,7 +3248,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.viewLikesOnly();
 
-              case 10:
+                _this.viewFollowOnly();
+
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -3272,6 +3279,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       this.likesPhotos = onlyLike;
+    },
+    viewFollowOnly: function viewFollowOnly() {
+      var onlyFollow = [];
+
+      var _iterator2 = _createForOfIteratorHelper(this.photos),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var photo = _step2.value;
+
+          if (photo.owner.follow_by_user) {
+            onlyFollow.push(photo);
+          }
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      this.followPhotos = onlyFollow;
     },
     onLikeClick: function onLikeClick(_ref) {
       var id = _ref.id,
@@ -3375,28 +3404,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
-    },
-    follow: function follow(follow_id) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.put("/api/user/".concat(follow_id));
-
-              case 2:
-                response = _context4.sent;
-                return _context4.abrupt("return", false);
-
-              case 4:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
     }
   },
   watch: {
@@ -3404,20 +3411,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function handler() {
         var _this4 = this;
 
-        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context5.prev = _context5.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
-                  _context5.next = 2;
+                  _context4.next = 2;
                   return _this4.fetchPhotos();
 
                 case 2:
                 case "end":
-                  return _context5.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee5);
+          }, _callee4);
         }))();
       },
       immediate: true
@@ -5078,15 +5085,6 @@ var render = function () {
           ? _c("div", { staticClass: "navbar__item" }, [
               _c(
                 "button",
-                { staticClass: "button", on: { click: _vm.follow } },
-                [
-                  _c("i", { staticClass: "icon ion-md-add" }),
-                  _vm._v("\n        follow\n      "),
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
                 {
                   staticClass: "button",
                   on: {
@@ -5857,7 +5855,7 @@ var render = function () {
               _vm._v(" "),
               _c("figcaption", [
                 _vm._v(
-                  "\n      Posted by " + _vm._s(_vm.photo.owner) + "\n    "
+                  "\n      Posted by " + _vm._s(_vm.photo.owner.name) + "\n    "
                 ),
               ]),
             ]
@@ -6093,6 +6091,20 @@ var render = function () {
           },
           [_vm._v("Likes post")]
         ),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            staticClass: "tab__item",
+            class: { "tab__item--active": _vm.tab === 3 },
+            on: {
+              click: function ($event) {
+                _vm.tab = 3
+              },
+            },
+          },
+          [_vm._v("Follow users post")]
+        ),
       ]),
       _vm._v(" "),
       _c(
@@ -6133,6 +6145,30 @@ var render = function () {
           staticClass: "grid",
         },
         _vm._l(_vm.likesPhotos, function (photo) {
+          return _c("Photo", {
+            key: photo.id,
+            staticClass: "grid__item",
+            attrs: { item: photo },
+            on: { like: _vm.onLikeClick },
+          })
+        }),
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.tab === 3,
+              expression: "tab === 3",
+            },
+          ],
+          staticClass: "grid",
+        },
+        _vm._l(_vm.followPhotos, function (photo) {
           return _c("Photo", {
             key: photo.id,
             staticClass: "grid__item",

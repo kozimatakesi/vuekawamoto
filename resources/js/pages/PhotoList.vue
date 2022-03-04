@@ -11,6 +11,11 @@
         :class="{'tab__item--active': tab === 2 }"
         @click="tab = 2"
       >Likes post</li>
+      <li
+        class="tab__item"
+        :class="{'tab__item--active': tab === 3 }"
+        @click="tab = 3"
+      >Follow users post</li>
     </ul>
     <div v-show="tab === 1" class="grid">
       <Photo
@@ -25,6 +30,16 @@
       <Photo
         class="grid__item"
         v-for="photo in likesPhotos"
+        :key="photo.id"
+        :item="photo"
+        @like="onLikeClick"
+      />
+
+    </div>
+    <div v-show="tab === 3" class="grid">
+      <Photo
+        class="grid__item"
+        v-for="photo in followPhotos"
         :key="photo.id"
         :item="photo"
         @like="onLikeClick"
@@ -56,6 +71,7 @@ export default {
     return {
       tab: 1,
       likesPhotos:[],
+      followPhotos:[],
       photos: [],
       currentPage: 0,
       lastPage: 0
@@ -75,6 +91,7 @@ export default {
       this.lastPage = response.data.last_page
 
       this.viewLikesOnly()
+      this.viewFollowOnly()
     },
     viewLikesOnly() {
       const onlyLike = []
@@ -84,6 +101,15 @@ export default {
         }
       }
       this.likesPhotos = onlyLike
+    },
+    viewFollowOnly() {
+      const onlyFollow = []
+      for(let photo of this.photos) {
+        if(photo.owner.follow_by_user) {
+          onlyFollow.push(photo)
+        }
+      }
+      this.followPhotos = onlyFollow
     },
     onLikeClick ({ id, liked }) {
         if (! this.$store.getters['auth/check']) {
@@ -131,10 +157,6 @@ export default {
             return photo
         })
     },
-    async follow(follow_id) {
-      const response = await axios.put(`/api/user/${follow_id}`)
-      return false
-    }
   },
   watch: {
     $route: {

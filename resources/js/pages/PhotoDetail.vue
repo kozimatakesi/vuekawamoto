@@ -10,7 +10,7 @@
     >
       <img :src="photo.url" alt="">
       <figcaption>
-        Posted by {{ photo.owner }}
+        Posted by {{ photo.owner.name }}
       </figcaption>
     </figure>
 
@@ -91,7 +91,6 @@ export default {
       fullWidth: false,
       commentContent: '',
       commentErrors: null,
-      already: '',
     }
   },
   methods: {
@@ -164,9 +163,10 @@ export default {
       this.photo.likes_count = this.photo.likes_count - 1
       this.photo.liked_by_user = false
     },
+    // フォローボタンの機能
     onFollowClick() {
       if (! this.isLogin) {
-        alert('いいね機能を使うにはログインしてください。')
+        alert('フォロー機能を使うにはログインしてください。')
         return false
       }
       if (this.photo.owner.follow_by_user) {
@@ -174,20 +174,30 @@ export default {
       } else {
         this.follow()
       }
-
-
-
     },
+    // フォロー用メソッド
     async follow() {
       const id = this.photo.owner.id
       const response = await axios.put(`/api/user/${id}`)
+
+      if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+      }
+
       this.photo.owner.follow_by_user = true
       return false
     },
-
+    // アンフォロー用メソッド
     async unfollow() {
       const id = this.photo.owner.id
       const response = await axios.delete(`/api/user/${id}`)
+
+      if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+      }
+
       this.photo.owner.follow_by_user = false
       return false
     }
@@ -202,9 +212,11 @@ export default {
     }
   },
   computed: {
+    // ログイン状態をstoreでチェック
     isLogin () {
       return this.$store.getters['auth/check']
     },
+    // ログインしているユーザーIDをstoreでチェック、フォローボタンを出すか出さないかの判定のため
     isUserId() {
       return this.$store.state.auth.user.id
     }
