@@ -67,11 +67,15 @@ class User extends Authenticatable
      */
     public function follows()
     {
+        // follower_userテーブルからそのユーザーインスタンスのidがuser_idと一致するレコードを返す
+        // そのuser_idと一致したレコードのfollower_idとuserテーブルのidと等しいレコードを返す
         return $this->belongsToMany(self::class, 'follower_user', 'follower_id', 'user_id');
     }
 
     public function followers()
     {
+        // belongsToManyの場合は第2引数に従テーブル名,第3引数に従テーブルの外部キー,第4引数に従テーブルの外部キー
+        // follower_userテーブルからそのユーザーインスタンスのidがfollower_idと一致するものを返す
         return $this->belongsToMany(self::class, 'follower_user', 'user_id', 'follower_id');
     }
 }
