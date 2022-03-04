@@ -130,6 +130,10 @@ export default {
             this.viewLikesOnly()
             return photo
         })
+    },
+    async follow(follow_id) {
+      const response = await axios.put(`/api/user/${follow_id}`)
+      return false
     }
   },
   watch: {

@@ -9,17 +9,30 @@
         @click="fullWidth = ! fullWidth"
     >
       <img :src="photo.url" alt="">
-      <figcaption>Posted by {{ photo.owner.name }}</figcaption>
+      <figcaption>
+        Posted by {{ photo.owner }}
+      </figcaption>
     </figure>
+
     <div class="photo-detail__pane">
-        <button
-            class="button button--like"
-            :class="{ 'button--liked': photo.liked_by_user }"
-            title="Like photo"
-            @click="onLikeClick"
-        >
-            <i class="icon ion-md-heart"></i>{{ photo.likes_count }}
-        </button>
+      <button
+        class="button button--like"
+        :class="{ 'button--liked': photo.liked_by_user }"
+        title="Like photo"
+        @click="onLikeClick"
+      >
+        <i class="icon ion-md-heart"></i>{{ photo.likes_count }}
+      </button>
+      <button
+        v-if="isUserId !== photo.owner.id"
+        class="button button--like"
+        :class="{ 'button--liked': photo.owner.follow_by_user }"
+        title="Like photo"
+        @click="onFollowClick"
+      >
+        フォロー<span v-if="photo.owner.follow_by_user">済み</span>
+      </button>
+
       <a
         :href="`/photos/${photo.id}/download`"
         class="button"
@@ -32,31 +45,30 @@
       </h2>
       <ul v-if="photo.comments.length > 0" class="photo-detail__comments">
         <li
-            v-for="comment in photo.comments"
-            :key="comment.content"
-            class="photo-detail__commentItem"
+          v-for="comment in photo.comments"
+          :key="comment.content"
+          class="photo-detail__commentItem"
         >
-            <p class="photo-detail__commentBody">
-            {{ comment.content }}
-            </p>
-            <p class="photo-detail__commentInfo">
-            from: {{ comment.author.name }}
-            </p>
-            <p class="photo-detail__commentInfo">
-            at: {{ comment.created_at }}
-            </p>
-
+          <p class="photo-detail__commentBody">
+          {{ comment.content }}
+          </p>
+          <p class="photo-detail__commentInfo">
+          from: {{ comment.author.name }}
+          </p>
+          <p class="photo-detail__commentInfo">
+          at: {{ comment.created_at }}
+          </p>
         </li>
       </ul>
       <form v-if="isLogin" @submit.prevent="addComment" class="form">
         <div v-if="commentErrors" class="errors">
-            <ul v-if="commentErrors.content">
-            <li v-for="msg in commentErrors.content" :key="msg">{{ msg }}</li>
-            </ul>
+          <ul v-if="commentErrors.content">
+          <li v-for="msg in commentErrors.content" :key="msg">{{ msg }}</li>
+          </ul>
         </div>
         <textarea class="form__item" v-model="commentContent"></textarea>
         <div class="form__button">
-            <button type="submit" class="button button--inverse">submit comment</button>
+          <button type="submit" class="button button--inverse">submit comment</button>
         </div>
       </form>
     </div>
@@ -78,7 +90,8 @@ export default {
       photo: null,
       fullWidth: false,
       commentContent: '',
-      commentErrors: null
+      commentErrors: null,
+      already: '',
     }
   },
   methods: {
@@ -93,64 +106,92 @@ export default {
       this.photo = response.data
     },
     async addComment () {
-        const response = await axios.post(`/api/photos/${this.id}/comments`, {
-        content: this.commentContent
-        })
+      const response = await axios.post(`/api/photos/${this.id}/comments`, {
+      content: this.commentContent
+      })
 
-        // バリデーションエラー
-        if (response.status === UNPROCESSABLE_ENTITY) {
-            this.commentErrors = response.data.errors
-            return false
-        }
+      // バリデーションエラー
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.commentErrors = response.data.errors
+        return false
+      }
 
-        this.commentContent = ''
-        // エラーメッセージをクリア
-        this.commentErrors = null
+      this.commentContent = ''
+      // エラーメッセージをクリア
+      this.commentErrors = null
 
-        // その他のエラー
-        if (response.status !== CREATED) {
-            this.$store.commit('error/setCode', response.status)
-            return false
-        }
-        this.photo.comments = [
-            response.data,
-            ...this.photo.comments
-        ]
+      // その他のエラー
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+      this.photo.comments = [
+        response.data,
+        ...this.photo.comments
+      ]
     },
     onLikeClick () {
-        if (! this.isLogin) {
-            alert('いいね機能を使うにはログインしてください。')
-            return false
-        }
+      if (! this.isLogin) {
+        alert('いいね機能を使うにはログインしてください。')
+        return false
+      }
 
-        if (this.photo.liked_by_user) {
-            this.unlike()
-        } else {
-            this.like()
-        }
+      if (this.photo.liked_by_user) {
+        this.unlike()
+      } else {
+        this.like()
+      }
     },
     async like () {
-        const response = await axios.put(`/api/photos/${this.id}/like`)
+      const response = await axios.put(`/api/photos/${this.id}/like`)
 
-        if (response.status !== OK) {
-            this.$store.commit('error/setCode', response.status)
-            return false
-        }
+      if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+      }
 
-        this.photo.likes_count = this.photo.likes_count + 1
-        this.photo.liked_by_user = true
+      this.photo.likes_count = this.photo.likes_count + 1
+      this.photo.liked_by_user = true
     },
     async unlike () {
-        const response = await axios.delete(`/api/photos/${this.id}/like`)
+      const response = await axios.delete(`/api/photos/${this.id}/like`)
 
-        if (response.status !== OK) {
-            this.$store.commit('error/setCode', response.status)
-            return false
-        }
+      if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+      }
 
-        this.photo.likes_count = this.photo.likes_count - 1
-        this.photo.liked_by_user = false
+      this.photo.likes_count = this.photo.likes_count - 1
+      this.photo.liked_by_user = false
+    },
+    onFollowClick() {
+      if (! this.isLogin) {
+        alert('いいね機能を使うにはログインしてください。')
+        return false
+      }
+      if (this.photo.owner.follow_by_user) {
+        this.unfollow()
+      } else {
+        this.follow()
+      }
+
+
+
+    },
+    async follow() {
+      const id = this.photo.owner.id
+      const response = await axios.put(`/api/user/${id}`)
+      this.photo.owner.follow_by_user = true
+      return false
+    },
+
+    async unfollow() {
+      const id = this.photo.owner.id
+      const response = await axios.delete(`/api/user/${id}`)
+      this.photo.owner.follow_by_user = false
+      return false
     }
+
   },
   watch: {
     $route: {
@@ -162,7 +203,10 @@ export default {
   },
   computed: {
     isLogin () {
-        return this.$store.getters['auth/check']
+      return this.$store.getters['auth/check']
+    },
+    isUserId() {
+      return this.$store.state.auth.user.id
     }
   },
 }

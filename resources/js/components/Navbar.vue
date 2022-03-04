@@ -1,10 +1,15 @@
 <template>
   <nav class="navbar">
     <RouterLink class="navbar__brand" to="/">
-      Vuekawamoto
+      ビュー川本
     </RouterLink>
     <div class="navbar__menu">
       <div v-if="isLogin" class="navbar__item">
+        <button class="button" @click="follow">
+          <i class="icon ion-md-add"></i>
+          follow
+        </button>
+
         <button class="button" @click="showForm = ! showForm">
           <i class="icon ion-md-add"></i>
           Submit a photo
@@ -34,7 +39,8 @@ export default {
   },
   data() {
       return {
-          showForm: false
+          showForm: false,
+          id: 2
       }
   },
   computed: {
@@ -43,6 +49,12 @@ export default {
     },
     username () {
       return this.$store.getters['auth/username']
+    }
+  },
+  methods: {
+    async follow() {
+      const response = await axios.put(`/api/user/2`)
+      return false
     }
   }
 }

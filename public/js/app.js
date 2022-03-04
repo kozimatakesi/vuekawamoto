@@ -2137,7 +2137,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _PhotoForm_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PhotoForm.vue */ "./resources/js/components/PhotoForm.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _PhotoForm_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PhotoForm.vue */ "./resources/js/components/PhotoForm.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2168,11 +2181,12 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    PhotoForm: _PhotoForm_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    PhotoForm: _PhotoForm_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
-      showForm: false
+      showForm: false,
+      id: 2
     };
   },
   computed: {
@@ -2181,6 +2195,30 @@ __webpack_require__.r(__webpack_exports__);
     },
     username: function username() {
       return this.$store.getters['auth/username'];
+    }
+  },
+  methods: {
+    follow: function follow() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.put("/api/user/2");
+
+              case 2:
+                response = _context.sent;
+                return _context.abrupt("return", false);
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   }
 });
@@ -2786,6 +2824,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2799,7 +2849,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       photo: null,
       fullWidth: false,
       commentContent: '',
-      commentErrors: null
+      commentErrors: null,
+      already: ''
     };
   },
   methods: {
@@ -2971,27 +3022,91 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee4);
       }))();
+    },
+    onFollowClick: function onFollowClick() {
+      if (!this.isLogin) {
+        alert('いいね機能を使うにはログインしてください。');
+        return false;
+      }
+
+      if (this.photo.owner.follow_by_user) {
+        this.unfollow();
+      } else {
+        this.follow();
+      }
+    },
+    follow: function follow() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var id, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                id = _this5.photo.owner.id;
+                _context5.next = 3;
+                return axios.put("/api/user/".concat(id));
+
+              case 3:
+                response = _context5.sent;
+                _this5.photo.owner.follow_by_user = true;
+                return _context5.abrupt("return", false);
+
+              case 6:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    unfollow: function unfollow() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var id, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                id = _this6.photo.owner.id;
+                _context6.next = 3;
+                return axios["delete"]("/api/user/".concat(id));
+
+              case 3:
+                response = _context6.sent;
+                _this6.photo.owner.follow_by_user = false;
+                return _context6.abrupt("return", false);
+
+              case 6:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this5 = this;
+        var _this7 = this;
 
-        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
             while (1) {
-              switch (_context5.prev = _context5.next) {
+              switch (_context7.prev = _context7.next) {
                 case 0:
-                  _context5.next = 2;
-                  return _this5.fetchPhoto();
+                  _context7.next = 2;
+                  return _this7.fetchPhoto();
 
                 case 2:
                 case "end":
-                  return _context5.stop();
+                  return _context7.stop();
               }
             }
-          }, _callee5);
+          }, _callee7);
         }))();
       },
       immediate: true
@@ -3000,6 +3115,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   computed: {
     isLogin: function isLogin() {
       return this.$store.getters['auth/check'];
+    },
+    isUserId: function isUserId() {
+      return this.$store.state.auth.user.id;
     }
   }
 });
@@ -3257,6 +3375,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
+    },
+    follow: function follow(follow_id) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return axios.put("/api/user/".concat(follow_id));
+
+              case 2:
+                response = _context4.sent;
+                return _context4.abrupt("return", false);
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     }
   },
   watch: {
@@ -3264,20 +3404,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function handler() {
         var _this4 = this;
 
-        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
             while (1) {
-              switch (_context4.prev = _context4.next) {
+              switch (_context5.prev = _context5.next) {
                 case 0:
-                  _context4.next = 2;
+                  _context5.next = 2;
                   return _this4.fetchPhotos();
 
                 case 2:
                 case "end":
-                  return _context4.stop();
+                  return _context5.stop();
               }
             }
-          }, _callee4);
+          }, _callee5);
         }))();
       },
       immediate: true
@@ -4930,12 +5070,21 @@ var render = function () {
     { staticClass: "navbar" },
     [
       _c("RouterLink", { staticClass: "navbar__brand", attrs: { to: "/" } }, [
-        _vm._v("\n    Vuekawamoto\n  "),
+        _vm._v("\n    ビュー川本\n  "),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "navbar__menu" }, [
         _vm.isLogin
           ? _c("div", { staticClass: "navbar__item" }, [
+              _c(
+                "button",
+                { staticClass: "button", on: { click: _vm.follow } },
+                [
+                  _c("i", { staticClass: "icon ion-md-add" }),
+                  _vm._v("\n        follow\n      "),
+                ]
+              ),
+              _vm._v(" "),
               _c(
                 "button",
                 {
@@ -5707,7 +5856,9 @@ var render = function () {
               _c("img", { attrs: { src: _vm.photo.url, alt: "" } }),
               _vm._v(" "),
               _c("figcaption", [
-                _vm._v("Posted by " + _vm._s(_vm.photo.owner.name)),
+                _vm._v(
+                  "\n      Posted by " + _vm._s(_vm.photo.owner) + "\n    "
+                ),
               ]),
             ]
           ),
@@ -5723,9 +5874,27 @@ var render = function () {
               },
               [
                 _c("i", { staticClass: "icon ion-md-heart" }),
-                _vm._v(_vm._s(_vm.photo.likes_count) + "\n      "),
+                _vm._v(_vm._s(_vm.photo.likes_count) + "\n    "),
               ]
             ),
+            _vm._v(" "),
+            _vm.isUserId !== _vm.photo.owner.id
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "button button--like",
+                    class: { "button--liked": _vm.photo.owner.follow_by_user },
+                    attrs: { title: "Like photo" },
+                    on: { click: _vm.onFollowClick },
+                  },
+                  [
+                    _vm._v("\n      フォロー"),
+                    _vm.photo.owner.follow_by_user
+                      ? _c("span", [_vm._v("済み")])
+                      : _vm._e(),
+                  ]
+                )
+              : _vm._e(),
             _vm._v(" "),
             _c(
               "a",
@@ -5758,25 +5927,25 @@ var render = function () {
                       [
                         _c("p", { staticClass: "photo-detail__commentBody" }, [
                           _vm._v(
-                            "\n          " +
+                            "\n        " +
                               _vm._s(comment.content) +
-                              "\n          "
+                              "\n        "
                           ),
                         ]),
                         _vm._v(" "),
                         _c("p", { staticClass: "photo-detail__commentInfo" }, [
                           _vm._v(
-                            "\n          from: " +
+                            "\n        from: " +
                               _vm._s(comment.author.name) +
-                              "\n          "
+                              "\n        "
                           ),
                         ]),
                         _vm._v(" "),
                         _c("p", { staticClass: "photo-detail__commentInfo" }, [
                           _vm._v(
-                            "\n          at: " +
+                            "\n        at: " +
                               _vm._s(comment.created_at) +
-                              "\n          "
+                              "\n        "
                           ),
                         ]),
                       ]

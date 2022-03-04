@@ -2,6 +2,12 @@
 
 use Illuminate\Http\Request;
 
+// フォロー
+Route::put('/user/{id}', 'UserController@follow')->name('user.follow');
+// アンフォロー
+Route::delete('/user/{id}', 'UserController@unfollow');
+
+
 // 会員登録
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
 // ログイン
