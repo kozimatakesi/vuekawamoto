@@ -23,6 +23,13 @@
       >
         <i class="icon ion-md-heart"></i>{{ photo.likes_count }}
       </button>
+      <a
+        :href="`/photos/${photo.id}/download`"
+        class="button"
+        title="Download photo"
+      >
+        <i class="icon ion-md-arrow-round-down"></i>Download
+      </a>
       <button
         v-if="isUserId !== photo.owner.id"
         class="button button--like"
@@ -32,14 +39,15 @@
       >
         フォロー<span v-if="photo.owner.follow_by_user">済み</span>
       </button>
-
-      <a
-        :href="`/photos/${photo.id}/download`"
-        class="button"
-        title="Download photo"
+      <button
+        v-else
+        class="button button--like"
+        title="Like photo"
+        @click="deletePhoto(photo)"
       >
-        <i class="icon ion-md-arrow-round-down"></i>Download
-      </a>
+        削除
+      </button>
+
       <h2 class="photo-detail__title">
         <i class="icon ion-md-chatboxes"></i>Comments
       </h2>
@@ -200,7 +208,19 @@ export default {
 
       this.photo.owner.follow_by_user = false
       return false
+    },
+    // 削除用メソッド
+    async deletePhoto($photo) {
+      const response = await axios.delete(`/api/photos/${this.id}/delete`, $photo)
+
+      if (response.status !== OK) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+      }
+
+      return false
     }
+
 
   },
   watch: {

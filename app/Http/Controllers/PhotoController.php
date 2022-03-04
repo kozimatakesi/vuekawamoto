@@ -47,7 +47,6 @@ class PhotoController extends Controller
       $user = \Auth::user();
       $photos = Photo::where('user_id', $user->id)->with(['owner', 'likes'])
       ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
-      Log::debug(print_r($photos, true));
       return $photos;
     }
 
@@ -63,7 +62,6 @@ class PhotoController extends Controller
         // 投稿写真の拡張子を取得する
         $extension = $request->photo->extension();
 
-
         $photo = new Photo();
 
         // インスタンス生成時に割り振られたランダムなID値と
@@ -72,7 +70,6 @@ class PhotoController extends Controller
 
         // originalNameをカラムoriginal_filenameに入れる、oliginalNameを取得するにはgetClientOriginalName()
         $photo->original_filename = $request->photo->getClientOriginalName();
-
 
         // S3にファイルを保存する
         // 第三引数の'public'はファイルを公開状態で保存するため
@@ -97,6 +94,19 @@ class PhotoController extends Controller
         // レスポンスコードは201(CREATED)を返却する
         return response($photo, 201);
     }
+
+    /**
+    * 削除
+    */
+
+    public function delete(string $id, Photo $photo)
+    {
+      // filename表示
+      Log::debug(print_r($photo->where('id', $id)->first()->filename, true));
+      // paramsのid表示
+      Log::debug(print_r($id, true));
+    }
+
 
     /**
      * 写真ダウンロード

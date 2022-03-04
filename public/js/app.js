@@ -2799,6 +2799,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3073,27 +3081,63 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee6);
       }))();
+    },
+    // 削除用メソッド
+    deletePhoto: function deletePhoto($photo) {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return axios["delete"]("/api/photos/".concat(_this7.id, "/delete"), $photo);
+
+              case 2:
+                response = _context7.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context7.next = 6;
+                  break;
+                }
+
+                _this7.$store.commit('error/setCode', response.status);
+
+                return _context7.abrupt("return", false);
+
+              case 6:
+                return _context7.abrupt("return", false);
+
+              case 7:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this7 = this;
+        var _this8 = this;
 
-        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+        return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
             while (1) {
-              switch (_context7.prev = _context7.next) {
+              switch (_context8.prev = _context8.next) {
                 case 0:
-                  _context7.next = 2;
-                  return _this7.fetchPhoto();
+                  _context8.next = 2;
+                  return _this8.fetchPhoto();
 
                 case 2:
                 case "end":
-                  return _context7.stop();
+                  return _context8.stop();
               }
             }
-          }, _callee7);
+          }, _callee8);
         }))();
       },
       immediate: true
@@ -3139,6 +3183,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
 //
 //
 //
@@ -3428,6 +3474,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }))();
       },
       immediate: true
+    }
+  },
+  computed: {
+    // ログイン状態をstoreでチェック
+    isLogin: function isLogin() {
+      return this.$store.getters['auth/check'];
     }
   }
 });
@@ -5876,6 +5928,21 @@ var render = function () {
               ]
             ),
             _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "button",
+                attrs: {
+                  href: "/photos/" + _vm.photo.id + "/download",
+                  title: "Download photo",
+                },
+              },
+              [
+                _c("i", { staticClass: "icon ion-md-arrow-round-down" }),
+                _vm._v("Download\n    "),
+              ]
+            ),
+            _vm._v(" "),
             _vm.isUserId !== _vm.photo.owner.id
               ? _c(
                   "button",
@@ -5892,22 +5959,19 @@ var render = function () {
                       : _vm._e(),
                   ]
                 )
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "button",
-                attrs: {
-                  href: "/photos/" + _vm.photo.id + "/download",
-                  title: "Download photo",
-                },
-              },
-              [
-                _c("i", { staticClass: "icon ion-md-arrow-round-down" }),
-                _vm._v("Download\n    "),
-              ]
-            ),
+              : _c(
+                  "button",
+                  {
+                    staticClass: "button button--like",
+                    attrs: { title: "Like photo" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.deletePhoto(_vm.photo)
+                      },
+                    },
+                  },
+                  [_vm._v("\n      削除\n    ")]
+                ),
             _vm._v(" "),
             _vm._m(0),
             _vm._v(" "),
@@ -6078,33 +6142,37 @@ var render = function () {
           [_vm._v("All Post")]
         ),
         _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass: "tab__item",
-            class: { "tab__item--active": _vm.tab === 2 },
-            on: {
-              click: function ($event) {
-                _vm.tab = 2
+        _vm.isLogin
+          ? _c(
+              "li",
+              {
+                staticClass: "tab__item",
+                class: { "tab__item--active": _vm.tab === 2 },
+                on: {
+                  click: function ($event) {
+                    _vm.tab = 2
+                  },
+                },
               },
-            },
-          },
-          [_vm._v("Likes post")]
-        ),
+              [_vm._v("Likes post")]
+            )
+          : _vm._e(),
         _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass: "tab__item",
-            class: { "tab__item--active": _vm.tab === 3 },
-            on: {
-              click: function ($event) {
-                _vm.tab = 3
+        _vm.isLogin
+          ? _c(
+              "li",
+              {
+                staticClass: "tab__item",
+                class: { "tab__item--active": _vm.tab === 3 },
+                on: {
+                  click: function ($event) {
+                    _vm.tab = 3
+                  },
+                },
               },
-            },
-          },
-          [_vm._v("Follow users post")]
-        ),
+              [_vm._v("Follow users post")]
+            )
+          : _vm._e(),
       ]),
       _vm._v(" "),
       _c(

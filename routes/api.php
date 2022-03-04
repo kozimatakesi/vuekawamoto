@@ -24,7 +24,8 @@ Route::get('/photos', 'PhotoController@index')->name('photo.index');
 Route::get('/photo', 'PhotoController@all')->name('photo.all');
 // ログインユーザーの写真一覧
 Route::get('/own', 'PhotoController@own')->name('photo.own');
-
+// 写真削除
+Route::delete('/photos/{id}/delete', 'PhotoController@delete')->name('photo.delete');
 // 写真詳細
 Route::get('/photos/{id}', 'PhotoController@show')->name('photo.show');
 // コメント

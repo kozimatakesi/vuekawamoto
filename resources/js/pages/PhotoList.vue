@@ -7,11 +7,13 @@
         @click="tab = 1"
       >All Post</li>
       <li
+        v-if="isLogin"
         class="tab__item"
         :class="{'tab__item--active': tab === 2 }"
         @click="tab = 2"
       >Likes post</li>
       <li
+        v-if="isLogin"
         class="tab__item"
         :class="{'tab__item--active': tab === 3 }"
         @click="tab = 3"
@@ -164,6 +166,12 @@ export default {
         await this.fetchPhotos()
       },
       immediate: true
+    }
+  },
+  computed: {
+  // ログイン状態をstoreでチェック
+    isLogin () {
+      return this.$store.getters['auth/check']
     }
   }
 }
