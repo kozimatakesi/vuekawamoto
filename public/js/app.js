@@ -3108,9 +3108,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context7.abrupt("return", false);
 
               case 6:
+                _this7.$router.push('/');
+
                 return _context7.abrupt("return", false);
 
-              case 7:
+              case 8:
               case "end":
                 return _context7.stop();
             }
@@ -5907,7 +5909,7 @@ var render = function () {
               _vm._v(" "),
               _c("figcaption", [
                 _vm._v(
-                  "\n      Posted by " + _vm._s(_vm.photo.owner.name) + "\n    "
+                  "\n      Posted by " + _vm._s(_vm.photo.comments) + "\n    "
                 ),
               ]),
             ]

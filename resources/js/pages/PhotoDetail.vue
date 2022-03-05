@@ -10,7 +10,7 @@
     >
       <img :src="photo.url" alt="">
       <figcaption>
-        Posted by {{ photo.owner.name }}
+        Posted by {{ photo.comments }}
       </figcaption>
     </figure>
 
@@ -217,6 +217,8 @@ export default {
           this.$store.commit('error/setCode', response.status)
           return false
       }
+
+       this.$router.push('/')
 
       return false
     }
