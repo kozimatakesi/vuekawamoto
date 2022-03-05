@@ -101,12 +101,6 @@ class PhotoController extends Controller
 
     public function delete(string $id, Photo $photo)
     {
-      // filename表示
-      Log::debug(print_r(Photo::where('id', $id)->first(), true));
-      // paramsのid表示
-      Log::debug(print_r($id, true));
-      // Photo::where('id', $id)->comments->delete();
-      // Photo::where('id', $id)->likes()->delete();
       Photo::where('id', $id)->delete();
       Storage::cloud()->delete($photo->filename);
 

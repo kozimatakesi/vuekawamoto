@@ -3094,14 +3094,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                _context7.next = 2;
+                if (window.confirm('本当に削除しますか？')) {
+                  _context7.next = 5;
+                  break;
+                }
+
+                window.alert('キャンセルされました');
+                return _context7.abrupt("return", false);
+
+              case 5:
+                _context7.next = 7;
                 return axios["delete"]("/api/photos/".concat(_this7.id, "/delete"), $photo);
 
-              case 2:
+              case 7:
                 response = _context7.sent;
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context7.next = 6;
+                  _context7.next = 11;
                   break;
                 }
 
@@ -3109,12 +3118,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context7.abrupt("return", false);
 
-              case 6:
+              case 11:
                 _this7.$router.push('/');
 
                 return _context7.abrupt("return", false);
 
-              case 8:
+              case 13:
               case "end":
                 return _context7.stop();
             }
@@ -5911,7 +5920,7 @@ var render = function () {
               _vm._v(" "),
               _c("figcaption", [
                 _vm._v(
-                  "\n      Posted by " + _vm._s(_vm.photo.comments) + "\n    "
+                  "\n      Posted by " + _vm._s(_vm.photo.owner.name) + "\n    "
                 ),
               ]),
             ]

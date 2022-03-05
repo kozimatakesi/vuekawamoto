@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddOnDeleteToCommentsTable extends Migration
+class DeleteForeignToLikesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddOnDeleteToCommentsTable extends Migration
      */
     public function up()
     {
-        // commentsのphoto_id foreignを削除
-        Schema::table('comments', function (Blueprint $table) {
-          $table->dropForeign('comments_photo_id_foreign');
+        // likesテーブルのforeign key photo_idを削除
+        Schema::table('likes', function (Blueprint $table) {
+          $table->dropForeign('likes_photo_id_foreign');
         });
     }
 
@@ -26,7 +26,7 @@ class AddOnDeleteToCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('comments', function (Blueprint $table) {
+        Schema::table('likes', function (Blueprint $table) {
           $table->foreign('photo_id')
                 ->references('id')
                 ->on('photos');

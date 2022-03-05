@@ -10,7 +10,7 @@
     >
       <img :src="photo.url" alt="">
       <figcaption>
-        Posted by {{ photo.comments }}
+        Posted by {{ photo.owner.name }}
       </figcaption>
     </figure>
 
@@ -213,16 +213,18 @@ export default {
     },
     // 削除用メソッド
     async deletePhoto($photo) {
-      const response = await axios.delete(`/api/photos/${this.id}/delete`, $photo)
-
-      if (response.status !== OK) {
-          this.$store.commit('error/setCode', response.status)
-          return false
+      if(!window.confirm('本当に削除しますか？')){
+        window.alert('キャンセルされました');
+        return false;
+      } else {
+        const response = await axios.delete(`/api/photos/${this.id}/delete`, $photo)
+        if (response.status !== OK) {
+            this.$store.commit('error/setCode', response.status)
+            return false
+        }
+        this.$router.push('/')
+        return false
       }
-
-       this.$router.push('/')
-
-      return false
     }
 
 
