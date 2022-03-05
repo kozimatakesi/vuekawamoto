@@ -30,23 +30,25 @@
       >
         <i class="icon ion-md-arrow-round-down"></i>Download
       </a>
-      <button
-        v-if="isUserId !== photo.owner.id"
-        class="button button--like"
-        :class="{ 'button--liked': photo.owner.follow_by_user }"
-        title="Like photo"
-        @click="onFollowClick"
-      >
-        フォロー<span v-if="photo.owner.follow_by_user">済み</span>
-      </button>
-      <button
-        v-else
-        class="button button--like"
-        title="Like photo"
-        @click="deletePhoto(photo)"
-      >
-        削除
-      </button>
+      <span v-if="isLogin">
+        <button
+          v-if="isUserId !== photo.owner.id"
+          class="button button--like"
+          :class="{ 'button--liked': photo.owner.follow_by_user }"
+          title="Like photo"
+          @click="onFollowClick"
+        >
+          フォロー<span v-if="photo.owner.follow_by_user">済み</span>
+        </button>
+        <button
+          v-else
+          class="button button--like"
+          title="Like photo"
+          @click="deletePhoto(photo)"
+        >
+          削除
+        </button>
+      </span>
 
       <h2 class="photo-detail__title">
         <i class="icon ion-md-chatboxes"></i>Comments

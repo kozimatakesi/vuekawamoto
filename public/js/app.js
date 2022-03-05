@@ -2807,6 +2807,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -5945,35 +5947,41 @@ var render = function () {
               ]
             ),
             _vm._v(" "),
-            _vm.isUserId !== _vm.photo.owner.id
-              ? _c(
-                  "button",
-                  {
-                    staticClass: "button button--like",
-                    class: { "button--liked": _vm.photo.owner.follow_by_user },
-                    attrs: { title: "Like photo" },
-                    on: { click: _vm.onFollowClick },
-                  },
-                  [
-                    _vm._v("\n      フォロー"),
-                    _vm.photo.owner.follow_by_user
-                      ? _c("span", [_vm._v("済み")])
-                      : _vm._e(),
-                  ]
-                )
-              : _c(
-                  "button",
-                  {
-                    staticClass: "button button--like",
-                    attrs: { title: "Like photo" },
-                    on: {
-                      click: function ($event) {
-                        return _vm.deletePhoto(_vm.photo)
-                      },
-                    },
-                  },
-                  [_vm._v("\n      削除\n    ")]
-                ),
+            _vm.isLogin
+              ? _c("span", [
+                  _vm.isUserId !== _vm.photo.owner.id
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "button button--like",
+                          class: {
+                            "button--liked": _vm.photo.owner.follow_by_user,
+                          },
+                          attrs: { title: "Like photo" },
+                          on: { click: _vm.onFollowClick },
+                        },
+                        [
+                          _vm._v("\n        フォロー"),
+                          _vm.photo.owner.follow_by_user
+                            ? _c("span", [_vm._v("済み")])
+                            : _vm._e(),
+                        ]
+                      )
+                    : _c(
+                        "button",
+                        {
+                          staticClass: "button button--like",
+                          attrs: { title: "Like photo" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.deletePhoto(_vm.photo)
+                            },
+                          },
+                        },
+                        [_vm._v("\n        削除\n      ")]
+                      ),
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _vm._m(0),
             _vm._v(" "),

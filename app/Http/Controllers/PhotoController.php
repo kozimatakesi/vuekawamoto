@@ -107,8 +107,8 @@ class PhotoController extends Controller
       Log::debug(print_r($id, true));
       // Photo::where('id', $id)->comments->delete();
       // Photo::where('id', $id)->likes()->delete();
-      // Photo::where('id', $id)->delete();
-      // Storage::cloud()->delete($photo->filename);
+      Photo::where('id', $id)->delete();
+      Storage::cloud()->delete($photo->filename);
 
       return ["photo_id" => $id];
     }
