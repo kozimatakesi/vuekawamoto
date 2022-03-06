@@ -213,6 +213,17 @@ export default {
     },
     // 削除用メソッド
     async deletePhoto($photo) {
+      if(! this.isLogin) {
+        alert('削除を行うにはログインしてください。')
+        return false
+      }
+
+      if(!this.isUserId === this.photo.owner.id) {
+        alert('削除は自分の写真しか行えません')
+        return false
+      }
+
+
       if(!window.confirm('本当に削除しますか？')){
         window.alert('キャンセルされました');
         return false;
