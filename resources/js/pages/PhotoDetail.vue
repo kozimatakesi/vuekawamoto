@@ -116,7 +116,7 @@ export default {
     },
     async addComment () {
       const response = await axios.post(`/api/photos/${this.id}/comments`, {
-      content: this.commentContent
+        content: this.commentContent
       })
 
       // バリデーションエラー
@@ -213,7 +213,7 @@ export default {
     },
     // 削除用メソッド
     async deletePhoto($photo) {
-      if(! this.isLogin) {
+      if(!this.isLogin) {
         alert('削除を行うにはログインしてください。')
         return false
       }

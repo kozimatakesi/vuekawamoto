@@ -7,7 +7,6 @@ Route::put('/user/{id}', 'UserController@follow')->name('user.follow');
 // アンフォロー
 Route::delete('/user/{id}', 'UserController@unfollow');
 
-
 // 会員登録
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
 // ログイン
@@ -16,6 +15,7 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 // ログインユーザー
 Route::get('/user', fn() => Auth::user())->name('user');
+
 // 写真投稿
 Route::post('/photos', 'PhotoController@create')->name('photo.create');
 // 写真一覧 ページネーション

@@ -98,7 +98,6 @@ class PhotoController extends Controller
     /**
     * 削除
     */
-
     public function delete(string $id, Photo $photo)
     {
       Photo::where('id', $id)->delete();
