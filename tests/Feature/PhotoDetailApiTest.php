@@ -33,6 +33,8 @@ class PhotoDetailApiTest extends TestCase
                 'liked_by_user' => false,
                 'likes_count' => 0,
                 'owner' => [
+                    'follow_by_user' => false,
+                    'id' => $photo->owner->id,
                     'name' => $photo->owner->name,
                 ],
                 'comments' => $photo->comments
@@ -40,7 +42,9 @@ class PhotoDetailApiTest extends TestCase
                     ->map(function ($comment) {
                         return [
                             'author' => [
-                                'name' => $comment->author->name,
+                              'follow_by_user' => false,
+                              'id' => $comment->user_id,
+                              'name' => $comment->author->name,
                             ],
                             'content' => $comment->content,
                             'created_at' => '2022-03-02 23:10:24'

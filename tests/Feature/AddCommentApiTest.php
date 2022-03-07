@@ -41,9 +41,11 @@ class AddCommentApiTest extends TestCase
             // JSONフォーマットが期待通りであること
             ->assertJsonFragment([
                 "author" => [
+                    "follow_by_user" => false,
+                    "id" => $this->user->id,
                     "name" => $this->user->name,
                 ],
-                "content" => $content,
+                "content" => $content
             ]);
 
         // DBにコメントが1件登録されていること

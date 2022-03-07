@@ -34,6 +34,8 @@ class PhotoListApiTest extends TestCase
                 'url' => $photo->url,
                 'original_filename' => $photo->original_filename,
                 'owner' => [
+                    'follow_by_user' => false,
+                    'id' => $photo->owner->id,
                     'name' => $photo->owner->name,
                 ],
                 'liked_by_user' => false,
