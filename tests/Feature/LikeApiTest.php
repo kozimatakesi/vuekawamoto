@@ -7,6 +7,7 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Log;
 
 class LikeApiTest extends TestCase
 {
@@ -27,17 +28,22 @@ class LikeApiTest extends TestCase
      */
     public function should_いいねを追加できる()
     {
-        $response = $this->actingAs($this->user)
-            ->json('PUT', route('photo.like', [
-                'id' => $this->photo->id,
-            ]));
 
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'photo_id' => $this->photo->id,
-            ]);
+      Log::debug(print_r($this->photo->likes()->count(), true));
 
-        $this->assertEquals(1, $this->photo->likes()->count());
+      $response = $this->actingAs($this->user)
+          ->json('PUT', route('photo.like', [
+              'id' => $this->photo->id,
+          ]));
+
+      Log::debug(print_r($this->photo->likes()->count(), true));
+
+      $response->assertStatus(200)
+          ->assertJsonFragment([
+              'photo_id' => $this->photo->id,
+          ]);
+
+      $this->assertEquals(1, $this->photo->likes()->count());
     }
 
     /**

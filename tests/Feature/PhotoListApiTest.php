@@ -92,9 +92,20 @@ class PhotoListApiTest extends TestCase
         })
         ->all();
 
+
+        $count = 0;
+        $equal_user_array = array();
+
+        foreach($expected_data as $data) {
+          if($data['owner']['name'] === $this->user->name) {
+            $count++;
+            $equal_user_array[] = $data;
+          }
+        }
+
         $response->assertStatus(200)
             // レスポンスJSONのdata項目に含まれる要素が5つであること
-            ->assertJsonCount(0, 'data');
+            ->assertJsonCount($count, 'data');
             // レスポンスJSONのdata項目が期待値と合致すること
             // ->assertJsonFragment([
             //     "data" => $expected_data,

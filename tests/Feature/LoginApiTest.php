@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Log;
 
 class LoginApiTest extends TestCase
 {
@@ -36,6 +37,8 @@ class LoginApiTest extends TestCase
         ];
 
         $response = $this->json('POST', route('login'), $data);
+
+
 
         $response
             ->assertStatus(200)
