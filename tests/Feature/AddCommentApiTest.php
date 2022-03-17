@@ -53,4 +53,45 @@ class AddCommentApiTest extends TestCase
         // 内容がAPIでリクエストしたものであること
         $this->assertEquals($content, $comments[0]->content);
     }
+
+    /**
+     * @test
+     */
+    public function should_バリデーションコメントの表示_未入力()
+    {
+      factory(Photo::class)->create();
+      $photo = Photo::first();
+
+      $content = '';
+
+      $response = $this->actingAs($this->user)
+      ->json('POST', route('photo.comment', [
+          'photo' => $photo->id,
+      ]), compact('content'));
+
+      $response->assertJsonValidationErrors([
+        "content" => "content は入力してください。"  ,
+      ]);
+    }
+
+        /**
+     * @test
+     */
+    public function should_バリデーションコメントの表示_51文字以上()
+    {
+      factory(Photo::class)->create();
+      $photo = Photo::first();
+
+      $content = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+
+      $response = $this->actingAs($this->user)
+      ->json('POST', route('photo.comment', [
+          'photo' => $photo->id,
+      ]), compact('content'));
+
+      $response->assertJsonValidationErrors([
+        "content" => "content は 50 文字以内にしてください。" ,
+      ]);
+    }
+
 }
