@@ -15,13 +15,13 @@ class Photo extends Model
 
     /** JSONに含めるアクセサ */
     protected $appends = [
-        'url', 'likes_count', 'liked_by_user',
+      'url', 'likes_count', 'liked_by_user',
     ];
 
     /** JSONに含める属性 */
     protected $visible = [
-        'id', 'owner', 'url','original_filename','comments',
-        'likes_count', 'liked_by_user',
+      'id', 'owner', 'url','original_filename','comments',
+      'likes_count', 'liked_by_user',
     ];
 
     // IDの長さ
@@ -29,36 +29,36 @@ class Photo extends Model
 
     public function __construct(array $attributes = [])
     {
-        // 親モデル Modelのコンストラクタを持ってきてる
-        parent::__construct($attributes);
+      // 親モデル Modelのコンストラクタを持ってきてる
+      parent::__construct($attributes);
 
-        // attributesプロパティにidがなければ、実行する
-        if(! Arr::get($this->attributes, 'id')) {
-            $this->setId();
-        }
+      // attributesプロパティにidがなければ、実行する
+      if(! Arr::get($this->attributes, 'id')) {
+          $this->setId();
+      }
     }
 
     private function setId()
     {
-        $this->attributes['id'] = $this->getRandomId();
+      $this->attributes['id'] = $this->getRandomId();
     }
 
     private function getRandomId()
     {
-        $characters = array_merge(
-            range(0, 9), range('a', 'z'),
-            range('A', 'Z'), ['-', '_']
-        );
+      $characters = array_merge(
+          range(0, 9), range('a', 'z'),
+          range('A', 'Z'), ['-', '_']
+      );
 
-        $length = count($characters);
+      $length = count($characters);
 
-        $id = "";
+      $id = "";
 
-        for ($i = 0; $i < self::ID_LENGTH; $i++) {
-            $id .= $characters[random_int(0, $length - 1)];
-        }
+      for ($i = 0; $i < self::ID_LENGTH; $i++) {
+          $id .= $characters[random_int(0, $length - 1)];
+      }
 
-        return $id;
+      return $id;
     }
 
     /**
@@ -67,7 +67,7 @@ class Photo extends Model
      */
     public function owner()
     {
-        return $this->belongsTo('App\User', 'user_id', 'id', 'users');
+      return $this->belongsTo('App\User', 'user_id', 'id', 'users');
     }
 
     /**
@@ -76,7 +76,7 @@ class Photo extends Model
      */
     public function getUrlAttribute()
     {
-        return Storage::cloud()->url($this->attributes['filename']);
+      return Storage::cloud()->url($this->attributes['filename']);
     }
 
     /**
@@ -85,7 +85,7 @@ class Photo extends Model
      */
     public function getLikesCountAttribute()
     {
-        return $this->likes->count();
+      return $this->likes->count();
     }
 
     /**
@@ -94,13 +94,13 @@ class Photo extends Model
      */
     public function getLikedByUserAttribute()
     {
-        if (Auth::guest()) {
-            return false;
-        }
+      if (Auth::guest()) {
+          return false;
+      }
 
-        return $this->likes->contains(function ($user) {
-            return $user->id === Auth::user()->id;
-        });
+      return $this->likes->contains(function ($user) {
+          return $user->id === Auth::user()->id;
+      });
     }
 
     /**
@@ -109,7 +109,7 @@ class Photo extends Model
      */
     public function comments()
     {
-        return $this->hasMany('App\Comment')->orderBy('id', 'desc');
+      return $this->hasMany('App\Comment')->orderBy('id', 'desc');
     }
 
     /**
@@ -118,7 +118,7 @@ class Photo extends Model
      */
     public function likes()
     {
-        return $this->belongsToMany('App\User', 'likes')->withTimestamps();
+      return $this->belongsToMany('App\User', 'likes')->withTimestamps();
     }
 
 }
