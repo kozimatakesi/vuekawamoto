@@ -74,7 +74,7 @@ class AddCommentApiTest extends TestCase
       ]);
     }
 
-        /**
+    /**
      * @test
      */
     public function should_バリデーションコメントの表示_51文字以上()
